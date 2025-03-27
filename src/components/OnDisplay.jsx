@@ -1,19 +1,20 @@
 import styled from "styled-components";
+import { Link } from "react-router";
+
+
 
 export default function OnDisplay({ movies }) {
   return (
-    <>
       <Display>
         <Title>
           <TitleName>Em Cartaz</TitleName>
         </Title>
         <MoviesSection>
           {movies.map((movie) => {
-            return (<Poster src={movie.posterURL} key={movie.id} />);
+            return (<Link to = {`/sessoes/${movie.id}`}key={movie.id}><Poster src={movie.posterURL} /></Link>);
           })}
         </MoviesSection>
       </Display>
-    </>
   );
 }
 

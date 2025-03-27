@@ -4,6 +4,7 @@ import Header from '../src/components/Header'
 import OnDisplay from "./components/OnDisplay"
 import axios from "axios"
 import { useEffect, useState } from "react"
+import Schedules from "./components/Schedules"
 
 
 
@@ -13,7 +14,7 @@ function App() {
   useEffect(() => {
       axios.get('https://mock-api.driven.com.br/api/v8/cineflex/movies')
       .then(res => setMovies(res.data))
-      .catch(error => error.data)
+      .catch(error => alert(error.data))
   }, [])
 
   return (
@@ -22,6 +23,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<OnDisplay movies = {movies}/>}></Route>
+        <Route path="/sessoes/:idFilme" element = {<Schedules />} />
       </Routes>
 
     </BrowserRouter>
