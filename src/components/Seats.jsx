@@ -15,20 +15,94 @@ export default function Seats() {
       <Title>
         <TitleName>Selecione o(s) assento(s)</TitleName>
       </Title>
-      <SeatsSection>
-        {availables.map((seat) => {
-          return (
-            <Seat>
-              <HiddenCheckbox  disabled = {!seat.isAvailable} type="checkbox" id = {seat.id}></HiddenCheckbox>
-              <SeatIcon $isAvailable = {seat.isAvailable} htmlFor={seat.id}>{seat.isAvailable ? `${seat.name}` : ''}</SeatIcon>
-            </Seat>
-          );
-        })}
-      </SeatsSection>
+      <SeatsForm>
+        <SeatsSection>
+          {availables.map((seat) => {
+            return (
+              <Seat>
+                <HiddenCheckbox disabled={!seat.isAvailable} type="checkbox" id={seat.id}></HiddenCheckbox>
+                <SeatIcon $isAvailable={seat.isAvailable} htmlFor={seat.id}>{seat.isAvailable ? `${seat.name}` : ''}</SeatIcon>
+              </Seat>
+            );
+          })}
+        </SeatsSection>
+        <BuyerData>
+          <Name>
+            Nome do comprador(a)
+          </Name>
+          <NameInput type="text" placeholder="Digite seu nome..." />
+          <Cpf>
+            CPF do comprador(a)
+          </Cpf>
+          <CpfInput type="text" placeholder="Digite seu CPF..." />
+          <Reserve type="submit">Reservar assento(s)</Reserve>
+        </BuyerData>
+      </SeatsForm>
     </Display>
   );
 }
-  const HiddenCheckbox = styled.input`
+const Reserve = styled.button`
+  width: 90vw;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: rgba(238, 137, 127, 1);
+  color: rgba(43, 45, 54, 1);
+  font-weight: 700;
+  font-family: "Sarala", sans-serif;
+  font-size: 18px;
+  padding: 10px 0;
+  margin-top: 35px;
+
+`;
+const Cpf = styled.label`
+  font-family: "Sarala", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: white;
+  margin-top: 15px;
+`;
+const CpfInput = styled.input`
+  font-family: "Sarala", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+  width: 90vw;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 8px 20px;
+  margin-top: 5px;
+`;
+const Name = styled.label`
+  font-family: "Sarala", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: white;
+`;
+const NameInput = styled.input`
+  font-family: "Sarala", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+  width: 90vw;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 8px 20px;
+  margin-top: 5px;
+`;
+const BuyerData = styled.div`
+    width: 90vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: solid 1px rgba(78, 90, 101, 1);
+  `;
+const HiddenCheckbox = styled.input`
     opacity: 0;
     position: absolute;
     width: 0;
@@ -54,20 +128,24 @@ const SeatIcon = styled.label`
     border: solid 2px rgba(238, 137, 127, 1);
   }
 `;
-
+const SeatsSection = styled.div`
+    display: grid;
+    grid-template-columns: repeat(10, 26px);
+    grid-template-rows: repeat(5, 26px);
+    gap: 8px;
+   align-items: center;
+   justify-content: center;
+  `;
 const Seat = styled.label`
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+
 `;
-const SeatsSection = styled.form`
+const SeatsForm = styled.form`
   height: auto;
   width: 90vw;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 8px;
 `;
 const Title = styled.div`
   display: flex;
@@ -87,7 +165,7 @@ const Display = styled.div`
     width: 100vw;
     height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
   }
 `;
