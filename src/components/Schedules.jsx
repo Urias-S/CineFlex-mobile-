@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import styled from "styled-components";
-
+import { Link } from "react-router";
 export default function Schedules() {
   const [sessions, setSessions] = useState([]);
   const { idFilme } = useParams();
@@ -19,14 +19,14 @@ export default function Schedules() {
       <SchedulesSection >
         {sessions.map((session) => {
           return (
-            <SessionDay key = {session.id}>
+            <SessionDay key={session.id}>
               <p>
                 {session.weekday}, {session.date}
               </p>
               <SessionSchedule >
                 {session.showtimes.map((session) => {
                   return (
-                    <button key = {session.id}>{session.name}</button>
+                    <Link key={session.id} to={`/assentos/${session.id}`}> <button >{session.name}</button></Link>
                   );
                 })}
               </SessionSchedule>
@@ -81,7 +81,7 @@ const SessionDay = styled.div`
     align-items: center;
   }
 `;
-  
+
 
 const SchedulesSection = styled.div`
   height: 100%;

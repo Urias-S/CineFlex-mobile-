@@ -5,6 +5,7 @@ import OnDisplay from "./components/OnDisplay"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import Schedules from "./components/Schedules"
+import Seats from "./components/Seats"
 
 
 
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<OnDisplay movies = {movies}/>}></Route>
         <Route path="/sessoes/:idFilme" element = {<Schedules />} />
+        <Route path="/assentos/:idSessao" element =  {<Seats />}/>
       </Routes>
 
     </BrowserRouter>
