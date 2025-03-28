@@ -21,7 +21,7 @@ export default function Seats() {
             return (
               <Seat>
                 <HiddenCheckbox disabled={!seat.isAvailable} type="checkbox" id={seat.id}></HiddenCheckbox>
-                <SeatIcon $isAvailable={seat.isAvailable} htmlFor={seat.id}>{seat.isAvailable ? `${seat.name}` : ''}</SeatIcon>
+                <SeatIcon $isAvailable={seat.isAvailable} htmlFor={seat.id}>{seat.name}</SeatIcon>
               </Seat>
             );
           })}
