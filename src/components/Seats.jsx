@@ -1,26 +1,59 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 export default function Seats() {
   const [availables, setAvailables] = useState([]);
   const { idSessao } = useParams();
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [name, setName] = useState('');
+  const [cpf, setCpf] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
       .then(res => setAvailables(res.data.seats))
       .catch(error => alert(error.response.data));
   }, []);
+
+  function submitReserve(submit) {
+    submit.preventDefault();
+
+    if (selectedSeats.length === 0) {
+      alert('Selecione o(s) assento(s)');
+      return;
+    }
+
+    const reserve = {
+      ids: selectedSeats,
+      name: name,
+      cpf: cpf
+    }
+
+    axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', reserve)
+    .then(() => navigate('/sucesso'))
+    .catch((error) => console.log(error.response.data));
+  }
+
+  function toggleSeat(id) {
+    setSelectedSeats(prev => prev.includes(id) ? prev.filter((seatId) => seatId !== id) : [...prev, id]);
+  }
   return (
     <Display>
       <Title>
         <TitleName>Selecione o(s) assento(s)</TitleName>
       </Title>
-      <SeatsForm>
+      <SeatsForm onSubmit={(submit) => submitReserve(submit)}>
         <SeatsSection>
           {availables.map((seat) => {
             return (
-              <Seat>
-                <HiddenCheckbox disabled={!seat.isAvailable} type="checkbox" id={seat.id}></HiddenCheckbox>
+              <Seat key={seat.id}>
+                <HiddenCheckbox
+                  disabled={!seat.isAvailable}
+                  type="checkbox"
+                  id={seat.id}
+                  checked={selectedSeats.includes(seat.id)}
+                  onChange={() => toggleSeat(seat.id)}
+                />
                 <SeatIcon $isAvailable={seat.isAvailable} htmlFor={seat.id}>{seat.name}</SeatIcon>
               </Seat>
             );
@@ -30,11 +63,21 @@ export default function Seats() {
           <Name>
             Nome do comprador(a)
           </Name>
-          <NameInput type="text" placeholder="Digite seu nome..." />
+          <NameInput
+            type="text"
+            placeholder="Digite seu nome..."
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <Cpf>
             CPF do comprador(a)
           </Cpf>
-          <CpfInput type="text" placeholder="Digite seu CPF..." />
+          <CpfInput
+            type="tel"
+            placeholder="Digite seu CPF..."
+            onChange={(e) => setCpf(e.target.value)}
+            required
+          />
           <Reserve type="submit">Reservar assento(s)</Reserve>
         </BuyerData>
       </SeatsForm>

@@ -6,6 +6,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import Schedules from "./components/Schedules"
 import Seats from "./components/Seats"
+import OrderCompleted from "./components/OrderCompleted"
 
 
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<OnDisplay movies = {movies}/>}></Route>
         <Route path="/sessoes/:idFilme" element = {<Schedules />} />
         <Route path="/assentos/:idSessao" element =  {<Seats />}/>
+        <Route path="/sucesso" element = {<OrderCompleted />}/>
       </Routes>
 
     </BrowserRouter>
