@@ -6,12 +6,17 @@ export default function Seats() {
   const [availables, setAvailables] = useState([]);
   const { idSessao } = useParams();
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [selectedNames, setSelectedNames] = useState([]);
   const [name, setName] = useState('');
   const [cpf, setCpf] = useState('');
+  const [session, setSession] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
     axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
-      .then(res => setAvailables(res.data.seats))
+      .then(res => {
+        setAvailables(res.data.seats);
+        setSession(res.data);
+      })
       .catch(error => alert(error.response.data));
   }, []);
 
@@ -29,14 +34,32 @@ export default function Seats() {
       cpf: cpf
     }
 
+    const resume = session ? {
+      name: session.movie.title,
+      day: session.day.date,
+      time: session.name,
+      seats: selectedNames,
+      buyerName: name,
+      buyerCpf: cpf
+    } : null;
+
     axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', reserve)
-    .then(() => navigate('/sucesso'))
-    .catch((error) => console.log(error.response.data));
+      .then(() => {
+        if (resume) {
+          navigate('/sucesso', { state: { resume } });
+        } else {
+          alert('Ocorreu um erro');
+        }
+      })
+      .catch((error) => console.log(error.response.data));
   }
 
-  function toggleSeat(id) {
+  function toggleSeat(id, name) {
     setSelectedSeats(prev => prev.includes(id) ? prev.filter((seatId) => seatId !== id) : [...prev, id]);
+    setSelectedNames((prev) => prev.includes(name) ? prev.filter((seatName) => seatName !== name) : [...prev, name]
+    );
   }
+
   return (
     <Display>
       <Title>
@@ -52,7 +75,7 @@ export default function Seats() {
                   type="checkbox"
                   id={seat.id}
                   checked={selectedSeats.includes(seat.id)}
-                  onChange={() => toggleSeat(seat.id)}
+                  onChange={() => toggleSeat(seat.id, seat.name)}
                 />
                 <SeatIcon $isAvailable={seat.isAvailable} htmlFor={seat.id}>{seat.name}</SeatIcon>
               </Seat>
